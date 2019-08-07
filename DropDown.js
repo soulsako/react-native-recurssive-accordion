@@ -29,13 +29,13 @@ class DropDown extends React.PureComponent {
     return (
       <Animated.View style={{height: this.animated}}>
         <TouchableOpacity activeOpacity={0.5} onPress={this.onPress}>
-          <View onLayout={ this.onAnimLayout } style={[styles.title, this.props.selected ? styles.option : styles.subOption]}>
-            <Text>{this.props.title}</Text>
+          <View onLayout={ this.onAnimLayout } style={[styles.title, this.props.selected ? styles.accordion : null, this.props.isSubAccordion ? styles.subAccordion : styles.accordion]}>
+            <Text>{this.props.header}</Text>
             {/* Displays arrows if needed. <Image source={this.state.contentVisible ? this.props.visibleImage : this.props.invisibleImage} style={styles.icons}/> */}
           </View>
         </TouchableOpacity>
-        {this.props.content ? <View onLayout={this.onLayout} style={styles.content}>
-          <Text>{this.props.content}</Text>
+        {this.props.body !== " " ? <View onLayout={this.onLayout} style={styles.content}>
+          <Text>{this.props.body}</Text>
         </View> : null}
       </Animated.View>
     );
@@ -86,7 +86,7 @@ class DropDown extends React.PureComponent {
 
   onPress = () => {
     this.runAnimation();
-    this.props.onOptionClicked(!this.props.selected);
+    this.props.onAccordionClicked(!this.props.selected);
   }
 
 }
@@ -114,13 +114,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10, 
     justifyContent: 'center', 
     borderBottomColor: '#111',
-    borderBottomWidth: StyleSheet.hairlineWidth
+    borderBottomWidth: StyleSheet.hairlineWidth, 
 
   }, 
-  subOption: {
+  subAccordion: {
     backgroundColor: '#fff'
   }, 
-  option: {
+  accordion: {
     backgroundColor: '#ddd', 
   }, 
   textColor:  {

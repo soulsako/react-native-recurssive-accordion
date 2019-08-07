@@ -1,107 +1,69 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
-import OptionsList from './OptionsList';
-
-//Create dummy data
-const options = [
-  {
-    title: 'Men',
-    id: 'men-id',
-    subOptions: [
-      {
-        title: 'Men Clothing', 
-        id: 'men-clothing-id', 
-        subOptions: [
-          {
-            title: 'addidas', 
-            id: 'men-adidas-clothing-id',
-            body: 'This is mens adidas clothing',
-            subOptions: []
-          }, 
-          {
-            title: 'asics', 
-            id: 'men-asics-clothing-id',
-            body: 'This is mens adidas footwear', 
-            subOptions: []
-          }
-        ]
-      },
-      {
-        title: 'Men Footwear', 
-        id: 'men-footwear-id', 
-        subOptions: [{
-          title: 'addidas', 
-          id: 'men-adidas-clothing-id',
-          body: 'This is mens adidas clothing',
-          subOptions: []
-        }, 
-        {
-          title: 'asics', 
-          id: 'men-asics-clothing-id',
-          body: 'This is mens adidas footwear', 
-          subOptions: []
-        }]
-      }
-    ]
-  },
-  {
-    title: 'women',
-    id: 'women-id',
-    subOptions: [
-      {
-        title: 'Women Clothing', 
-        id: 'women-clothing-id',
-        body:'this is women clothing',
-        subOptions: [{
-          title: 'addidas', 
-          id: 'women-adidas-clothing-id',
-          body: 'This is mens adidas clothing',
-          subOptions: []
-        }, 
-        {
-          title: 'asics', 
-          id: 'women-asics-clothing-id',
-          body: 'This is mens adidas footwear', 
-          subOptions: []
-        }]
-      }, 
-      {
-        title: 'Women Footwear', 
-        id: 'women-footwear-id',
-        body:'this is women clothing',
-        subOptions: []
-      }, 
-      {
-        title: 'Women Accessories', 
-        id: 'women-accessories-id',
-        body:'this is women clothing',
-        subOptions: []
-      }
-    ]
-  }
-];
+import AccordionsList from './AccordionsList';
+import Api from './services/api';
 
 
 //Create the the root component
 export default class App extends React.PureComponent {
 
-  state = {
-    selectedOptions: {}
+  static defaultProps = {
+    count: {
+      current: 0
+    }
   };
 
+
+  state = {
+    selectedAccordions: {}, 
+    content: null, 
+    loading: true
+  };
+
+  componentDidMount(){
+    this.fetchData();
+  }
+
+  fetchData = async () => {
+
+    const content = await Api.http({
+      page: 'size-guide'
+    });
+    
+    this.addAccordionIds(content.accordians);
+    this.setState({content, loading: false})
+  }
+
+  //Give each accordion an id based on its header
+  addAccordionIds = (accordions) => {
+    this.props.count.current += 1;
+    accordions.forEach(accordion => {
+      accordion.id = `${accordion.header}-id-${this.props.count.current}`;
+      if(accordion.subAccordians && accordion.subAccordians.length > 0){
+        this.addAccordionIds(accordion.subAccordians);
+      }
+    })
+  }
+
   render(){
-    return (
+    const { content, loading } = this.state;
+    if(!content || loading) return <Text style={styles.container}>Loading...</Text>;
+    const { accordians, pageTitle } = this.state.content;
+  
+      return (
       <View style={styles.container}>
-        <Text style={styles.heading}>Size Guide</Text>
-        <ScrollView>
-          <OptionsList 
-            options={options} //Pass Data
-            onChange={(selectedOptions) => {this.setState({selectedOptions})}}
-            selectedOptions={{...this.state.selectedOptions}}
+        <Text style={styles.heading}>{pageTitle}</Text>
+        { content && !loading && 
+        <ScrollView style={styles.list}>
+          <AccordionsList 
+            accordions={accordians} //Pass Data
+            onChange={(selectedAccordions) => {this.setState({selectedAccordions})}}
+            selectedAccordions={{...this.state.selectedAccordions}}
+            isSubAccordion={false}
           />
         </ScrollView>
-      </View>
-    );
+        }
+      </View>)
   }
 }
 
