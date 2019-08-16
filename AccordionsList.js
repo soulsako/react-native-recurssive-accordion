@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { StyleSheet, LayoutAnimation, Platform, UIManager, ScrollView } from 'react-native';
+import { LayoutAnimation, Platform, UIManager, ScrollView } from 'react-native';
 import Accordion from './Accordion';
 
 export default class AccordionsList extends Component {
