@@ -27,7 +27,7 @@ class DropDown extends React.PureComponent {
 
   render() {
     return (
-      <Animated.View style={{height: this.animated}}>
+      <Animated.View>
         <TouchableOpacity activeOpacity={0.5} onPress={this.onPress}>
           <View onLayout={ this.onAnimLayout } style={[styles.title, this.props.selected ? styles.accordion : null, this.props.isSubAccordion ? styles.subAccordion : styles.accordion]}>
             <Text>{this.props.header}</Text>

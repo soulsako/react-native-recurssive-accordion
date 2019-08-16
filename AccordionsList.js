@@ -1,64 +1,74 @@
-import React, { Fragment } from 'react';
-import DropDown from './DropDown';
-// Recursive component
-export default class AccordionsList extends React.PureComponent {
+import React, { Component, Fragment } from 'react';
+import { StyleSheet, LayoutAnimation, Platform, UIManager, ScrollView } from 'react-native';
+import Accordion from './Accordion';
 
+export default class AccordionsList extends Component {
 
-  handleAccordionClicked = (selectedAccordionId) => {
+  constructor(props){
+    super(props);
 
-    const { selectedAccordions } = this.props; 
-    // is currently selected
-    if(selectedAccordions[selectedAccordionId]){
-    
-      // remove selected key from Accordions list
-      delete selectedAccordions[selectedAccordionId]; 
-    } else { // is not currently selected
-  
-      // Add selected key to AccordionsList
-
-      selectedAccordions[selectedAccordionId] = {} 
+    if(Platform.OS === 'android'){
+      UIManager.setLayoutAnimationEnabledExperimental(true);
     }
-    // call onChange function given by parent
-    this.props.onChange(selectedAccordions) 
+
+    this.state = {
+      accordions: props.accordions
+    }
+  }
+
+  changeLayout = (index) => {
+
+    const customAnimation = {
+      duration: 400,
+      create: {
+        type: LayoutAnimation.Types.easeInEaseOut,
+        property: LayoutAnimation.Properties.opacity,
+      },
+      update: {
+        type: LayoutAnimation.Types.easeInEaseOut,
+      }
+    }
+
+    LayoutAnimation.configureNext(customAnimation);
+
+    const array = this.state.accordions.map(item => {
+      const newItem = {...item}
+      newItem.expanded = false;
+      // console.log(newItem.title);
+      return newItem;
+      
+    });
+
+    if(array[index].expanded === false){
+      array[index].expanded = true;
+    }
+    this.setState(() => {
+      return {
+        accordions: array
+      }
+    });
 
   }
 
-  handleSubAccordionsListChange = (accordionId, subSelections) => {
+  render(){
 
-    const { selectedAccordions } = this.props; 
-
-    selectedAccordions[accordionId] = subSelections;
-    // call onChange function given by parent
-    this.props.onChange(selectedAccordions);
-
-  }
-
-  render() {
-    const  { accordions, selectedAccordions, isSubAccordion } = this.props;
-
+    const { accordions } = this.state;
+    
     return (
-      <Fragment>
-        {accordions.map(accordion => (
-          <Fragment key={accordion.id}>
-              <DropDown
-                selected={selectedAccordions[accordion.id]} // Undefined on initial mount
-                onAccordionClicked={() => this.handleAccordionClicked(accordion.id)}
-                header={accordion.header}
-                body={accordion.body}
-                isSubAccordion={isSubAccordion}
-              />
-            {/* Base Case not rendered unitll an Accordion is clicked*/}
-            { (accordion.subAccordians.length > 0 && selectedAccordions[accordion.id]) &&
-              <AccordionsList
-                accordions={accordion.subAccordians}
-                selectedAccordions={selectedAccordions[accordion.id]} 
-                onChange={(subSelections) => this.handleSubAccordionsListChange(accordion.id, subSelections)}
-                isSubAccordion={true} 
-              />
-            }
-          </Fragment>
-        ))}
-      </Fragment>
+      <ScrollView contentContainerStyle={{ paddingHorizontal: 10, paddingVertical: 5 }}>
+        {accordions.map((accordion, index) => (
+            <Fragment key={ index } >
+              <Accordion 
+                onClick={() => this.changeLayout(index)} 
+                accordion={ accordion } />
+                {(accordion.subAccordions.length > 0 && accordion['expanded']) &&
+                  <AccordionsList 
+                    accordions={accordion.subAccordions} 
+                    />
+                }
+            </Fragment>
+          ))}
+      </ScrollView>
     );
   }
 }

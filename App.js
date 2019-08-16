@@ -1,84 +1,133 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import AccordionsList from './AccordionsList';
-import Api from './services/api';
 
-
-//Create the the root component
 export default class App extends React.PureComponent {
 
-  static defaultProps = {
-    count: {
-      current: 0
-    }
-  };
-
-
-  state = {
-    selectedAccordions: {}, 
-    content: null, 
-    loading: true
-  };
-
-  componentDidMount(){
-    this.fetchData();
-  }
-
-  fetchData = async () => {
-
-    const content = await Api.http({
-      page: 'size-guide'
-    });
-    
-    this.addAccordionIds(content.accordians);
-    this.setState({content, loading: false})
-  }
-
-  //Give each accordion an id based on its header
-  addAccordionIds = (accordions) => {
-    this.props.count.current += 1;
-    accordions.forEach(accordion => {
-      accordion.id = `${accordion.header}-id-${this.props.count.current}`;
-      if(accordion.subAccordians && accordion.subAccordians.length > 0){
-        this.addAccordionIds(accordion.subAccordians);
+  constructor(props){
+    super(props);
+    const accordions = [
+      {
+        title: "Men",
+        expanded: false,
+        subAccordions: [
+          {
+            title: "Clothing",
+            expanded: false,
+            subAccordions: [
+              {
+                title: "Adidas",
+                expanded: false,
+                body: "This dropdown displays size for Adidas men's clothing.",
+                subAccordions: []
+              }, 
+              {
+                title: "Nike",
+                expanded: false,
+                body: "This dropdown displays size for men's Nike clothing.",
+                subAccordions: []
+              }, 
+              {
+                title: "Puma",
+                expanded: false,
+                body: "This dropdown displays size for men's Puma clothing.",
+                subAccordions: []
+              }
+          ]
+          },
+          {
+            title: "Footwear",
+            expanded: false,
+            body: " This dropdown displays size for men's footwear.",
+            subAccordions: []
+          },
+          {
+            title: "Accessories",
+            expanded: false,
+            body: " This dropdown displays size for men's accessories",
+            subAccordions: []
+          }
+        ]
+      }, 
+      {
+        title: "Women",
+        expanded: false,
+        subAccordions: [
+          {
+            title: "Women Clothing",
+            expanded: false,
+            subAccordions: [
+              {
+                title: "Adidas",
+                expanded: false,
+                body: "This dropdown displays size for Adidas men's clothing.",
+                subAccordions: []
+              }, 
+              {
+                title: "Nike",
+                expanded: false,
+                body: "This dropdown displays size for men's Nike clothing.",
+                subAccordions: []
+              }, 
+              {
+                title: "Puma",
+                expanded: false,
+                body: "This dropdown displays size for men's Puma clothing.",
+                subAccordions: []
+              }
+          ]
+          },
+          {
+            title: "Women Footwear",
+            expanded: false,
+            body: " This dropdown displays size for men's footwear.",
+            subAccordions: []
+          },
+          {
+            title: "Women Accessories",
+            expanded: false,
+            body: " This dropdown displays size for men's accessories",
+            subAccordions: []
+          }
+        ]
       }
-    })
+    ];
+
+    this.state = {
+      accordions
+    }
   }
+
 
   render(){
-    const { content, loading } = this.state;
-    if(!content || loading) return <Text style={styles.container}>Loading...</Text>;
-    const { accordians, pageTitle } = this.state.content;
   
-      return (
-      <View style={styles.container}>
-        <Text style={styles.heading}>{pageTitle}</Text>
-        { content && !loading && 
-        <ScrollView style={styles.list}>
-          <AccordionsList 
-            accordions={accordians} //Pass Data
-            onChange={(selectedAccordions) => {this.setState({selectedAccordions})}}
-            selectedAccordions={{...this.state.selectedAccordions}}
-            isSubAccordion={false}
-          />
-        </ScrollView>
-        }
-      </View>)
+    return (
+    <View style={styles.container}>
+      <Text style={styles.heading}>Size Guide</Text>
+      <View style={styles.list}>
+        <AccordionsList 
+          accordions={[...this.state.accordions]}
+        />
+      </View>
+    </View>
+    );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
+    flex: 1,
+    backgroundColor: '#FBFCFC',
     paddingTop: 40, 
   }, 
   heading: {
     fontWeight: 'bold', 
     alignSelf: 'center', 
-    padding: 20
+    padding: 20,
+    color: '#5499C7'
   }, 
   list: {
     borderTopWidth: 0.4, 
-    borderColor: "#111"
+    borderColor: '#5499C7'
   }
 });
