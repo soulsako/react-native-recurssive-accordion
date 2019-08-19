@@ -17,8 +17,7 @@ export default class AccordionsList extends Component {
     }
   }
 
-
-  changeLayout = (index, accordionHeight) => {
+  changeLayout = (index) => {
 
     //Custom Animation
     const customAnimation = {
@@ -34,8 +33,6 @@ export default class AccordionsList extends Component {
 
     //Animation 
     LayoutAnimation.configureNext(customAnimation);
-    // Scroll to currently selected accordion
-    this.scrollRef.scrollTo({x: 0, y: 0, animated: true});
 
       //Collpase all accordions
       const array = this.state.accordions.map((item, i) => {
@@ -62,17 +59,16 @@ export default class AccordionsList extends Component {
     
     return (
       <ScrollView 
-        contentContainerStyle={{ paddingHorizontal: 10, paddingVertical: 5 }}
-        ref={(view) => this.scrollRef = view}>
+        contentContainerStyle={{ paddingHorizontal: 10, paddingVertical: 5 }}>
         {accordions.map((accordion, index) => (
             <Fragment key={ index } >
               <Accordion 
                 onClick={() => this.changeLayout(index)} 
                 accordion={ accordion } />
                 {/*Base case. Reccursively mounts this component again*/}
-                {(accordion.subAccordions.length > 0 && accordion['expanded']) &&
+                {(accordion.subAccordians.length > 0 && accordion['expanded']) &&
                   <AccordionsList 
-                    accordions={accordion.subAccordions} 
+                    accordions={accordion.subAccordians} 
                     />
                 }
             </Fragment>

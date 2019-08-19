@@ -8,8 +8,7 @@ export default class App extends Component {
     super(props);
 
     this.state = {
-      modifiedHeight: 0, 
-      accordionHeight: null
+      modifiedHeight: 0
     }
 
   }
@@ -30,14 +29,14 @@ export default class App extends Component {
     return false;
   }
 
-  setAccordionHeight = (event) => {
-    const accordionHeight = event.nativeEvent.layout.height;
-    this.setState(() => {
-      return {
-        accordionHeight
-      }
-    })
-  }
+  // setAccordionHeight = (event) => {
+  //   const accordionHeight = event.nativeEvent.layout.height;
+  //   this.setState(() => {
+  //     return {
+  //       accordionHeight
+  //     }
+  //   })
+  // }
 
   render(){
 
@@ -47,14 +46,13 @@ export default class App extends Component {
       <View style={styles.btnContainer}>
         <TouchableOpacity 
           activeOpacity={ 0.8 } 
-          onPress={() => this.props.onClick(this.state.accordionHeight)} 
+          onPress={this.props.onClick} 
           style={[styles.btn, {backgroundColor: accordion.expanded ? Colors.selected : null}]}>
-          <Text style={[styles.btnText, {color: accordion.expanded ? '#fff' : Colors.selected}]}
-            onLayout={(event) => this.setAccordionHeight(event)}>
-            {accordion.title}
+          <Text style={[styles.btnText, {color: accordion.expanded ? '#fff' : Colors.selected}]}>
+            {accordion.header}
           </Text>
         </TouchableOpacity>
-        {accordion.body ? <View style={[styles.body, {height: this.state.modifiedHeight}]}>
+        {accordion.body !== " " ? <View style={[styles.body, {height: this.state.modifiedHeight}]}>
           <Text style={styles.bodyText}>{accordion.body}</Text>
         </View> : null}
       </View>
