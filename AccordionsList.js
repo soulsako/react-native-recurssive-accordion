@@ -7,6 +7,7 @@ export default class AccordionsList extends Component {
   constructor(props){
     super(props);
 
+    //Required for use of LayoutAnimation on android device
     if(Platform.OS === 'android'){
       UIManager.setLayoutAnimationEnabledExperimental(true);
     }
@@ -16,8 +17,10 @@ export default class AccordionsList extends Component {
     }
   }
 
-  changeLayout = (index) => {
 
+  changeLayout = (index, accordionHeight) => {
+
+    //Custom Animation
     const customAnimation = {
       duration: 400,
       create: {
@@ -29,19 +32,22 @@ export default class AccordionsList extends Component {
       }
     }
 
+    //Animation 
     LayoutAnimation.configureNext(customAnimation);
+    // Scroll to currently selected accordion
+    this.scrollRef.scrollTo({x: 0, y: 0, animated: true});
 
-    const array = this.state.accordions.map(item => {
-      const newItem = {...item}
-      newItem.expanded = false;
-      // console.log(newItem.title);
-      return newItem;
-      
-    });
+      //Collpase all accordions
+      const array = this.state.accordions.map((item, i) => {
+        if(index === i) return {...item}
+        const newItem = {...item}
+        newItem.expanded = false;
+        return newItem;
+      });
 
-    if(array[index].expanded === false){
-      array[index].expanded = true;
-    }
+    //toggle currently selected accordion
+    array[index].expanded = !array[index].expanded;
+
     this.setState(() => {
       return {
         accordions: array
@@ -55,12 +61,15 @@ export default class AccordionsList extends Component {
     const { accordions } = this.state;
     
     return (
-      <ScrollView contentContainerStyle={{ paddingHorizontal: 10, paddingVertical: 5 }}>
+      <ScrollView 
+        contentContainerStyle={{ paddingHorizontal: 10, paddingVertical: 5 }}
+        ref={(view) => this.scrollRef = view}>
         {accordions.map((accordion, index) => (
             <Fragment key={ index } >
               <Accordion 
                 onClick={() => this.changeLayout(index)} 
                 accordion={ accordion } />
+                {/*Base case. Reccursively mounts this component again*/}
                 {(accordion.subAccordions.length > 0 && accordion['expanded']) &&
                   <AccordionsList 
                     accordions={accordion.subAccordions} 

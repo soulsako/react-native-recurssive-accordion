@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import AccordionsList from './AccordionsList';
+import Colors from './Colors';
 
 export default class App extends React.PureComponent {
 
@@ -15,6 +16,66 @@ export default class App extends React.PureComponent {
             title: "Clothing",
             expanded: false,
             subAccordions: [
+              {
+                title: "Adidas",
+                expanded: false,
+                body: "This dropdown displays size for Adidas men's clothing.",
+                subAccordions: []
+              }, 
+              {
+                title: "Nike",
+                expanded: false,
+                body: "This dropdown displays size for men's Nike clothing.",
+                subAccordions: []
+              }, 
+              {
+                title: "Puma",
+                expanded: false,
+                body: "This dropdown displays size for men's Puma clothing.",
+                subAccordions: []
+              }, 
+              {
+                title: "Adidas",
+                expanded: false,
+                body: "This dropdown displays size for Adidas men's clothing.",
+                subAccordions: []
+              }, 
+              {
+                title: "Nike",
+                expanded: false,
+                body: "This dropdown displays size for men's Nike clothing.",
+                subAccordions: []
+              }, 
+              {
+                title: "Puma",
+                expanded: false,
+                body: "This dropdown displays size for men's Puma clothing.",
+                subAccordions: []
+              }, 
+              {
+                title: "Adidas",
+                expanded: false,
+                body: "This dropdown displays size for Adidas men's clothing.",
+                subAccordions: []
+              }, 
+              {
+                title: "Nike",
+                expanded: false,
+                body: "This dropdown displays size for men's Nike clothing.",
+                subAccordions: []
+              }, 
+              {
+                title: "Puma",
+                expanded: false,
+                body: "This dropdown displays size for men's Puma clothing.",
+                subAccordions: []
+              },
+              {
+                title: "Puma",
+                expanded: false,
+                body: "This dropdown displays size for men's Puma clothing.",
+                subAccordions: []
+              }, 
               {
                 title: "Adidas",
                 expanded: false,
@@ -113,6 +174,7 @@ export default class App extends React.PureComponent {
     );
   }
 }
+
 
 const styles = StyleSheet.create({
   container: {

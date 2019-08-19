@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import Colors from './Colors';
 
 export default class App extends Component {
 
@@ -7,10 +8,13 @@ export default class App extends Component {
     super(props);
 
     this.state = {
-      modifiedHeight: 0
+      modifiedHeight: 0, 
+      accordionHeight: null
     }
+
   }
 
+  //Similar to componentWillReciveProps 
   static getDerivedStateFromProps(nextProps) {
     if (nextProps.accordion.expanded) {
       return { modifiedHeight: null } // <- this is setState equivalent
@@ -26,16 +30,27 @@ export default class App extends Component {
     return false;
   }
 
+  setAccordionHeight = (event) => {
+    const accordionHeight = event.nativeEvent.layout.height;
+    this.setState(() => {
+      return {
+        accordionHeight
+      }
+    })
+  }
+
   render(){
 
     const { accordion } = this.props;
+
     return (
       <View style={styles.btnTextHolder}>
         <TouchableOpacity 
           activeOpacity={ 0.8 } 
-          onPress={this.props.onClick} 
+          onPress={() => this.props.onClick(this.state.accordionHeight)} 
           style={[styles.btn, {backgroundColor: accordion.expanded ? '#5499C7' : null}]}>
-          <Text style={[styles.btnText, {color: accordion.expanded ? '#fff' : "#5499C7"}]}>
+          <Text style={[styles.btnText, {color: accordion.expanded ? '#fff' : "#5499C7"}]}
+            onLayout={(event) => this.setAccordionHeight(event)}>
             {accordion.title}
           </Text>
         </TouchableOpacity>
@@ -45,7 +60,6 @@ export default class App extends Component {
       </View>
     );
   }
-  
 }
 
 const styles = StyleSheet.create({
@@ -71,7 +85,8 @@ const styles = StyleSheet.create({
     padding: 10
   }, 
   body: {
-    overflow: 'hidden'
+    overflow: 'hidden',
+    backgroundColor: '#EBF5FB'
   }
 
 });
