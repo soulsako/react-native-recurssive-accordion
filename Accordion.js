@@ -44,18 +44,18 @@ export default class App extends Component {
     const { accordion } = this.props;
 
     return (
-      <View style={styles.btnTextHolder}>
+      <View style={styles.btnContainer}>
         <TouchableOpacity 
           activeOpacity={ 0.8 } 
           onPress={() => this.props.onClick(this.state.accordionHeight)} 
-          style={[styles.btn, {backgroundColor: accordion.expanded ? '#5499C7' : null}]}>
-          <Text style={[styles.btnText, {color: accordion.expanded ? '#fff' : "#5499C7"}]}
+          style={[styles.btn, {backgroundColor: accordion.expanded ? Colors.selected : null}]}>
+          <Text style={[styles.btnText, {color: accordion.expanded ? '#fff' : Colors.selected}]}
             onLayout={(event) => this.setAccordionHeight(event)}>
             {accordion.title}
           </Text>
         </TouchableOpacity>
         {accordion.body ? <View style={[styles.body, {height: this.state.modifiedHeight}]}>
-          <Text style={styles.text}>{accordion.body}</Text>
+          <Text style={styles.bodyText}>{accordion.body}</Text>
         </View> : null}
       </View>
     );
@@ -64,29 +64,29 @@ export default class App extends Component {
 
 const styles = StyleSheet.create({
   
-  btnTextHolder: {
+  btnContainer: {
     borderWidth: 1,
-    borderColor: '#5499C7', 
+    borderColor: Colors.btnContainerBorder, 
     marginVertical: 5, 
     borderRadius: 3
   }, 
   btn: {
     padding: 10, 
-    backgroundColor: '#fff'
+    backgroundColor: Colors.btnBackground
   }, 
   btnText: {
     textAlign: 'center', 
-    color: '#5499C7', 
+    color: Colors.btnText, 
     fontSize: 16
-  },
-  text: {
-    fontSize: 14, 
-    color: '#5499C7', 
-    padding: 10
   }, 
   body: {
     overflow: 'hidden',
-    backgroundColor: '#EBF5FB'
+    backgroundColor: Colors.bodyBackground
+  }, 
+  bodyText: {
+    fontSize: 14, 
+    color: Colors.bodyText, 
+    padding: 10
   }
 
 });

@@ -179,17 +179,17 @@ export default class App extends React.PureComponent {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FBFCFC',
+    backgroundColor: Colors.appBackground,
     paddingTop: 40, 
   }, 
   heading: {
     fontWeight: 'bold', 
     alignSelf: 'center', 
     padding: 20,
-    color: '#5499C7'
+    color: Colors.heading
   }, 
   list: {
     borderTopWidth: 0.4, 
-    borderColor: '#5499C7'
+    borderColor: Colors.appBorder
   }
 });
