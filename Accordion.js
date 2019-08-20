@@ -29,35 +29,28 @@ export default class App extends Component {
     return false;
   }
 
-  // setAccordionHeight = (event) => {
-  //   const accordionHeight = event.nativeEvent.layout.height;
-  //   this.setState(() => {
-  //     return {
-  //       accordionHeight
-  //     }
-  //   })
-  // }
-
   render(){
 
     const { header, body, image, expanded } = this.props.accordion;
+    const { modifiedHeight } = this.state;
+    const bodyHeight = { height: modifiedHeight}
     let renderBody = null;
-    if(body !== " " && image.source !== ""){
+    if(body !== " " && image.source !== "" && image.source !== " "){
       renderBody = (
-        <View style={[styles.body, {height: this.state.modifiedHeight}]}>
+        <View style={[styles.body,bodyHeight]}>
           <Text style={styles.bodyText}>{body}</Text>
           <Image source={{uri: image.source}} style={styles.image}/>
         </View>
       );
-    }else if(body === " " && image.source !== ""){
+    }else if(body === " " && image.source !== "" && image.source !== " "){
       renderBody = (
-        <View style={[styles.body, {height: this.state.modifiedHeight}]}>
+        <View style={[styles.body, bodyHeight]}>
          <Image source={{uri: image.source}} style={styles.image}/>
         </View>
       );
-    }else if(body !== " " && image.source === ""){
+    }else if(body !== " " && image.source === "" && image.source !== " "){
       renderBody = (
-        <View style={[styles.body, {height: this.state.modifiedHeight}]}>
+        <View style={[styles.body, bodyHeight]}>
           <Text style={styles.bodyText}>{body}</Text>
         </View>
       );

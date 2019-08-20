@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { LayoutAnimation, Platform, UIManager, ScrollView } from 'react-native';
+import { LayoutAnimation, Platform, UIManager, ScrollView, Dimensions } from 'react-native';
 import Accordion from './Accordion';
 
 export default class AccordionsList extends Component {
@@ -56,6 +56,7 @@ export default class AccordionsList extends Component {
   render(){
 
     const { accordions } = this.state;
+    // const { height } = Dimensions.get('window');
     
     return (
       <ScrollView 
@@ -66,9 +67,9 @@ export default class AccordionsList extends Component {
                 onClick={() => this.changeLayout(index)} 
                 accordion={ accordion } />
                 {/*Base case. Reccursively mounts this component again*/}
-                {(accordion.subAccordians.length > 0 && accordion['expanded']) &&
+                {(accordion.subAccordions.length > 0 && accordion['expanded']) &&
                   <AccordionsList 
-                    accordions={accordion.subAccordians} 
+                    accordions={accordion.subAccordions} 
                     />
                 }
             </Fragment>
@@ -77,4 +78,5 @@ export default class AccordionsList extends Component {
     );
   }
 }
+
 

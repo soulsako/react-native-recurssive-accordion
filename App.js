@@ -23,11 +23,11 @@ export default class App extends React.PureComponent {
   fetchPage = async () => {
 
     const content = await Api.http({
-      page: 'size-guide'
+      page: 'test-size-guide'
     });
 
 
-    const accordions = this.addExpandedField(content.accordians);
+    const accordions = this.addExpandedField(content.accordions);
     this.setState({
       accordions, 
       loading: false, 
@@ -40,8 +40,8 @@ export default class App extends React.PureComponent {
   addExpandedField = (accordions) => {
     accordions.forEach(accordion => {
       accordion.expanded = false;
-      if(accordion.subAccordians && accordion.subAccordians.length > 0){
-        this.addExpandedField(accordion.subAccordians);
+      if(accordion.subAccordions && accordion.subAccordions.length > 0){
+        this.addExpandedField(accordion.subAccordions);
       }
     })
     return accordions;
