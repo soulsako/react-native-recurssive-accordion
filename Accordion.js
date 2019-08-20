@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import Colors from './Colors';
 
 export default class App extends Component {
@@ -40,25 +40,45 @@ export default class App extends Component {
 
   render(){
 
-    const { accordion } = this.props;
+    const { header, body, image, expanded } = this.props.accordion;
+    let renderBody = null;
+    if(body !== " " && image.source !== ""){
+      renderBody = (
+        <View style={[styles.body, {height: this.state.modifiedHeight}]}>
+          <Text style={styles.bodyText}>{body}</Text>
+          <Image source={{uri: image.source}} style={styles.image}/>
+        </View>
+      );
+    }else if(body === " " && image.source !== ""){
+      renderBody = (
+        <View style={[styles.body, {height: this.state.modifiedHeight}]}>
+         <Image source={{uri: image.source}} style={styles.image}/>
+        </View>
+      );
+    }else if(body !== " " && image.source === ""){
+      renderBody = (
+        <View style={[styles.body, {height: this.state.modifiedHeight}]}>
+          <Text style={styles.bodyText}>{body}</Text>
+        </View>
+      );
+    }
 
     return (
       <View style={styles.btnContainer}>
         <TouchableOpacity 
           activeOpacity={ 0.8 } 
           onPress={this.props.onClick} 
-          style={[styles.btn, {backgroundColor: accordion.expanded ? Colors.selected : null}]}>
-          <Text style={[styles.btnText, {color: accordion.expanded ? '#fff' : Colors.selected}]}>
-            {accordion.header}
+          style={[styles.btn, {backgroundColor: expanded ? Colors.selected : null}]}>
+          <Text style={[styles.btnText, {color: expanded ? '#fff' : Colors.selected}]}>
+            {header}
           </Text>
         </TouchableOpacity>
-        {accordion.body !== " " ? <View style={[styles.body, {height: this.state.modifiedHeight}]}>
-          <Text style={styles.bodyText}>{accordion.body}</Text>
-        </View> : null}
+        {renderBody}
       </View>
     );
   }
 }
+
 
 const styles = StyleSheet.create({
   
@@ -78,13 +98,17 @@ const styles = StyleSheet.create({
     fontSize: 16
   }, 
   body: {
-    overflow: 'hidden',
-    backgroundColor: Colors.bodyBackground
+    overflow: 'hidden', 
+    alignItems: 'center'
   }, 
   bodyText: {
     fontSize: 14, 
     color: Colors.bodyText, 
     padding: 10
+  }, 
+  image: {
+    width: 300, 
+    height: 110
   }
 
 });
